@@ -10,7 +10,7 @@ export ARCH=arm64
 export KBUILD_BUILD_HOST=void
 export KBUILD_BUILD_USER="DemonDrake"
 ZIPNAME=Void-OSS-KERNEL-RELEASE-"${DATE}".zip
-if [ ! -d clang ]; then mkdir clang && curl "https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android13-release/clang-r450784d.tar.gz" -o clang.tgz && tar -xzf clang.tgz -C clang; fi
+git clone --depth=1 https://gitlab.com/LeCmnGend/proton-clang clang
 
 [ -d "AnyKernel" ] && rm -rf AnyKernel
 [ -d "out" ] && rm -rf out || mkdir -p out
@@ -36,7 +36,7 @@ function zipping()
 {
 git clone --depth=1 https://github.com/cd-Seraph/AnyKernel3.git -b master AnyKernel
 cp out/arch/arm64/boot/Image AnyKernel
-python scripts/dtc/libfdt/mkdtboimg.py create AnyKernel/dtbo.img --page_size=4096 $dtbo
+python scripts/dtc/libfdt/mkdtboimg.py create AnyKernel/dtbo.img --page_size=4096 out/arch/arm64/boot/dts/vendor/oplus_7325/yupik-21643-overlay.dtbo
 cd AnyKernel
 zip -r9 "../$ZIPNAME" * -x .git README.md *placeholder
 cd ..
